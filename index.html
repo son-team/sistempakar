@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodCost Pro - Sistem Pakar Harga Jual Makanan</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Pro / Free CDN for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-body: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --card-border: rgba(255, 255, 255, 0.6);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --accent-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      --emerald: #10b981;
+      --rose: #f43f5e;
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.12);
+      --shadow-hover: 0 25px 50px -12px rgba(99, 102, 241, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+    
+    body {
+      margin: 0;
+      background-color: #f1f5f9;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
+      background-attachment: fixed;
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Top Navigation Bar */
+    .dashboard-bar {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: var(--radius-md);
+      padding: 14px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    .dashboard-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--primary-gradient);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.4px;
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.12);
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .dashboard-widgets {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .clock-widget {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .clock-icon { color: var(--primary); font-size: 16px; }
+
+    .time-display {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .date-display {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Hero Banner Berfoto Kuliner */
+    .hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      color: #ffffff;
+      box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.25);
+      background: linear-gradient(90deg, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.7) 60%, rgba(15, 23, 42, 0.4) 100%), 
+                  url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 650px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.8px;
+      color: #ffffff;
+    }
+
+    .hero p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    /* Card Styling */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--primary);
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    }
+
+    .card h2 {
+      font-size: 19px;
+      font-weight: 800;
+      margin: 0;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+
+    .sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .card-body { flex: 1; }
+
+    /* Inputs & Form Elements */
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 210px;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .row label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 14px;
+      font-size: 13px;
+      font-weight: 800;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-family: inherit;
+      color: #0f172a;
+      background: #ffffff;
+      transition: all 0.2s ease;
+      outline: none;
+      font-weight: 700;
+    }
+
+    .has-prefix input { padding-left: 42px; }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+
+    /* Tooltip Custom Modern */
+    .has-tooltip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: help;
+      border-bottom: 1px dotted var(--primary);
+    }
+
+    .has-tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: normal;
+      width: 230px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 99;
+      pointer-events: none;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .has-tooltip:hover::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Buttons */
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: var(--radius-sm);
+      padding: 13px 26px;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: #ffffff;
+      box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -4px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #334155;
+      border: 1.5px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .btn-add {
+      width: 100%;
+      margin-top: 8px;
+      padding: 11px;
+      background: rgba(99, 102, 241, 0.05);
+      border: 1.5px dashed rgba(99, 102, 241, 0.4);
+      color: var(--primary-dark);
+      border-radius: var(--radius-sm);
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-add:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: var(--primary);
+    }
+
+    .btn-del {
+      background: rgba(244, 63, 94, 0.1);
+      color: var(--rose);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: var(--radius-sm);
+      padding: 0 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-del:hover { background: rgba(244, 63, 94, 0.2); }
+
+    /* Totals & Separators */
+    .total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1.5px dashed #e2e8f0;
+      margin-top: 20px;
+      padding-top: 16px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #475569;
+    }
+
+    .total span:last-child {
+      color: var(--primary-dark);
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .full { grid-column: 1 / -1; }
+
+    /* Results Dashboard Grid */
+    .results {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .metric {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .metric:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-2px);
+    }
+
+    .metric small {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    .metric strong {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      display: block;
+    }
+
+    .metric.highlight {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+      border: 2px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .metric.highlight strong {
+      color: var(--primary-dark);
+    }
+
+    /* Status Banner / Box Diagnosa */
+    .status {
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      margin-top: 24px;
+      border: 1.5px solid;
+      position: relative;
+    }
+
+    .status h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status p {
+      margin: 4px 0;
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .recommendation-box {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed rgba(0,0,0,0.15);
+    }
+
+    .recommendation-list {
+      margin: 10px 0 0 0;
+      padding-left: 20px;
+      font-size: 14px;
+    }
+
+    .recommendation-list li { margin-bottom: 6px; }
+
+    .good { background: #f0fdf4; border-color: #86efac; color: #166534; }
+    .warn { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+    .bad  { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 24px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .table th {
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+    }
+
+    .table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .table tr:last-child td { border-bottom: none; }
+
+    .note {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-top: 16px;
+      background: #ffffff;
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .custom-row { margin-top: 10px; margin-bottom: 10px; }
+
+    /* Footer Copyright */
+    footer {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #e2e8f0;
+      padding: 24px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    footer span {
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      .dashboard-bar { flex-direction: column; gap: 16px; align-items: flex-start; }
+      .dashboard-widgets { width: 100%; justify-content: space-between; }
+      .grid { grid-template-columns: 1fr; }
+      .results { grid-template-columns: repeat(2, 1fr); }
+      .full { grid-column: auto; }
+    }
+
+    @media (max-width: 500px) {
+      .row { grid-template-columns: 1fr; }
+      .results { grid-template-columns: 1fr; }
+      .hero { padding: 30px 20px; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Top Bar Navigation -->
+  <header class="dashboard-bar">
+    <div class="dashboard-brand">
+      <div class="brand-icon"><i class="fa-solid fa-chart-pie"></i></div>
+      <div>
+        <span class="brand-title">CoastManagerial</span>
+        <span class="brand-tag">v2.5 Son</span>
+      </div>
+    </div>
+    <div class="dashboard-widgets">
+      <div class="clock-widget">
+        <i class="fa-regular fa-clock clock-icon"></i>
+        <div>
+          <div class="time-display" id="liveTime">00:00:00 WIB</div>
+          <div class="date-display" id="liveDate">Senin, 1 Jan 2026</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section Berfoto Kuliner -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="badge"><i class="fa-solid fa-bolt"></i> Smart Culinary System</div>
+      <h1>Sistem Pakar Harga Jual & Margin </h1>
+      <p>Hitung HPP, komisi aplikasi online (GoFood/GrabFood/ShopeeFood), dan dapatkan analisis rekomendasi penetapan harga yang tepat untuk bussines Anda.</p>
+    </div>
+  </section>
+
+  <div class="grid">
+    <!-- Card 1: Biaya Tetap -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-building"></i></div>
+        <div>
+          <h2>1. Biaya Tetap (Fixed Cost)</h2>
+          <div class="sub">Beban operasional rutin setiap bulan.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <label for="sewa"><i class="fa-solid fa-store" style="color:var(--primary)"></i> Sewa Tempat</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="sewa" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="gaji"><i class="fa-solid fa-users" style="color:var(--primary)"></i> Gaji Karyawan Tetap</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="gaji" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="internet"><i class="fa-solid fa-wifi" style="color:var(--primary)"></i> Internet & Wi-Fi</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="internet" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="izin"><i class="fa-solid fa-file-contract" style="color:var(--primary)"></i> Perizinan & Legalitas</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="izin" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="susut"><i class="fa-solid fa-calculator" style="color:var(--primary)"></i> Penyusutan Peralatan</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="susut" type="number" min="0" value="0"></div>
+        </div>
+        <div id="fixedCustom"></div>
+        <button class="btn btn-add" type="button" onclick="tambahBiaya('fixed')"><i class="fa-solid fa-plus"></i> Tambah Biaya Tetap Lainnya</button>
+      </div>
+      <div class="total">
+        <span>Total Biaya Tetap</span>
+        <span id="totalTetap">Rp0</span>
+      </div>
+    </section>
+
+    <!-- Card 2: Biaya Variabel -->
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-boxes-packing"></i></div>
+        <div>
+          <h2>2. Biaya Variabel (Variable Cost)</h2>
+          <div class="sub">Biaya produksi yang mengikuti porsi.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <label for="bahan"><i class="fa-solid fa-utensils" style="color:var(--emerald)"></i> Bahan Baku Utama</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="bahan" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="minyak"><i class="fa-solid fa-bottle-droplet" style="color:var(--emerald)"></i> Minyak Goreng / Bumbu</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="minyak" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="gas"><i class="fa-solid fa-fire" style="color:var(--emerald)"></i> Gas / Bahan Bakar</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="gas" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="listrik"><i class="fa-solid fa-bolt" style="color:var(--emerald)"></i> Listrik Produksi</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="listrik" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="air"><i class="fa-solid fa-faucet-drip" style="color:var(--emerald)"></i> Air Bersih</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="air" type="number" min="0" value="0"></div>
+        </div>
+        <div class="row">
+          <label for="kemasan"><i class="fa-solid fa-box" style="color:var(--emerald)"></i> Kemasan & Thinwall</label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="kemasan" type="number" min="0" value="0"></div>
+        </div>
+        <div id="variableCustom"></div>
+        <button class="btn btn-add" type="button" onclick="tambahBiaya('variable')"><i class="fa-solid fa-plus"></i> Tambah Biaya Variabel Lainnya</button>
+      </div>
+      <div class="total">
+        <span>Total Biaya Variabel</span>
+        <span id="totalVar">Rp0</span>
+      </div>
+    </section>
+
+    <!-- Card 3: Penjualan & Target -->
+    <section class="card full">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <div>
+          <h2>3. Parameter Penjualan & Target Keuntungan</h2>
+          <div class="sub">Atur target profit dan skema komisi platform online.</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <label for="porsi">
+            <span class="has-tooltip" data-tooltip="Jumlah porsi/unit yang dapat dihasilkan dari total gabungan biaya produksi di atas.">
+              <i class="fa-solid fa-chart-simple" style="color:#6366f1"></i> Jumlah porsi yang dihasilkan <i class="fa-solid fa-circle-info" style="font-size:12px; opacity:0.6"></i>
+            </span>
+          </label>
+          <div class="input-wrapper"><input id="porsi" type="number" min="1" value="100"></div>
+        </div>
+        <div class="row">
+          <label for="harga">
+            <span class="has-tooltip" data-tooltip="Harga yang dibayar konsumen untuk 1 porsi saat ini.">
+              <i class="fa-solid fa-tag" style="color:#6366f1"></i> Harga jual saat ini / porsi <i class="fa-solid fa-circle-info" style="font-size:12px; opacity:0.6"></i>
+            </span>
+          </label>
+          <div class="input-wrapper has-prefix"><span class="input-prefix">Rp</span><input id="harga" type="number" min="0" value="15000"></div>
+        </div>
+        <div class="row">
+          <label for="target">
+            <span class="has-tooltip" data-tooltip="Persentase laba bersih murni yang Anda targetkan setelah dipotong seluruh biaya.">
+              <i class="fa-solid fa-percent" style="color:#6366f1"></i> Target margin keuntungan (%) <i class="fa-solid fa-circle-info" style="font-size:12px; opacity:0.6"></i>
+            </span>
+          </label>
+          <div class="input-wrapper"><input id="target" type="number" min="0" max="99.99" step="0.1" value="30"></div>
+        </div>
+        <div class="row">
+          <label for="komisi">
+            <span class="has-tooltip" data-tooltip="Persentase komisi aplikasi merchant (seperti GoFood, GrabFood, ShopeeFood).">
+              <i class="fa-solid fa-mobile-screen-button" style="color:#6366f1"></i> Komisi aplikasi online (%) <i class="fa-solid fa-circle-info" style="font-size:12px; opacity:0.6"></i>
+            </span>
+          </label>
+          <div class="input-wrapper"><input id="komisi" type="number" min="0" max="100" step="0.1" value="0"></div>
+        </div>
+        
+        <div class="actions">
+          <button class="btn btn-primary" onclick="hitung()"><i class="fa-solid fa-wand-magic-sparkles"></i> Analisis Sekarang</button>
+          <button class="btn btn-secondary" onclick="resetForm()"><i class="fa-solid fa-rotate-left"></i> Reset Form</button>
+        </div>
+        
+        <div class="note">
+          💡 <b>Catatan Pakar:</b> Komisi aplikasi dipotong langsung dari harga jual akhir. Biaya tetap dialokasikan secara proporsional ke tiap porsi produk.
+        </div>
+      </div>
+    </section>
+
+    <!-- Card 4: Hasil & Diagnosa -->
+    <section class="card full">
+      <div class="card-header">
+        <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div>
+          <h2>4. Hasil Perhitungan & Diagnosa Pakar</h2>
+          <div class="sub">Ringkasan performa bisnis dan arahan keputusan harga.</div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="results">
+          <div class="metric"><small>Total Biaya Produksi</small><strong id="totalBiaya">Rp0</strong></div>
+          <div class="metric">
+            <small>
+              HPP / Porsi 
+              <span class="has-tooltip" data-tooltip="Harga Pokok Penjualan: Modal murni untuk memproduksi 1 porsi."><i class="fa-solid fa-circle-info"></i></span>
+            </small>
+            <strong id="hpp">Rp0</strong>
+          </div>
+          <div class="metric"><small>Laba Bersih / Porsi</small><strong id="laba">Rp0</strong></div>
+          <div class="metric">
+            <small>
+              Margin Bersih 
+              <span class="has-tooltip" data-tooltip="Persentase keuntungan bersih dari harga jual akhir."><i class="fa-solid fa-circle-info"></i></span>
+            </small>
+            <strong id="margin">0%</strong>
+          </div>
+          <div class="metric"><small>Beban Biaya Tetap</small><strong id="pctTetap">0%</strong></div>
+          <div class="metric"><small>Beban Biaya Variabel</small><strong id="pctVar">0%</strong></div>
+          <div class="metric"><small>Potongan Komisi</small><strong id="komisiRp">Rp0</strong></div>
+          <div class="metric highlight">
+            <small>
+              Harga Rekomendasi
+              <span class="has-tooltip" data-tooltip="Harga jual yang disarankan agar dapat memenuhi Target Margin Keuntungan Anda secara presisi."><i class="fa-solid fa-circle-info"></i></span>
+            </small>
+            <strong id="hargaRekom">Rp0</strong>
+          </div>
+        </div>
+
+        <div id="status" class="status warn">
+          <h3><i class="fa-solid fa-hourglass-start"></i> Menunggu Analisis...</h3>
+          <p>Masukkan data operasional di atas lalu klik tombol <b>“Analisis Sekarang”</b>.</p>
+        </div>
+
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Komponen Harga</th>
+                <th>Nilai Rupiah (Rp)</th>
+                <th>Persentase Terhadap Harga Jual</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>HPP (Modal Produksi per Porsi)</td><td id="tHpp">Rp0</td><td id="tHppPct">0%</td></tr>
+              <tr><td>Komisi Merchant Aplikasi</td><td id="tKomisi">Rp0</td><td id="tKomisiPct">0%</td></tr>
+              <tr><td>Laba Bersih Murni</td><td id="tLaba">Rp0</td><td id="tLabaPct">0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Footer Copyright -->
+<footer>
+  Copyright © <span>Sang Sur Yaa</span>
+</footer>
+
+<script>
+  // Live Clock & Date Widget
+  function updateClock() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('id-ID', { hour12: false }) + ' WIB';
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    const dateStr = now.toLocaleDateString('id-ID', dateOptions);
+    
+    document.getElementById('liveTime').textContent = timeStr;
+    document.getElementById('liveDate').textContent = dateStr;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  const ids = ['sewa','gaji','internet','izin','susut','bahan','minyak','gas','listrik','air','kemasan','porsi','harga','target','komisi'];
+  const n = id => Math.max(0, Number(document.getElementById(id).value) || 0);
+  const rp = x => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(x);
+  const pct = x => x.toFixed(2) + '%';
+
+  function tambahBiaya(type) {
+    const isFixed = type === 'fixed';
+    const box = document.getElementById(isFixed ? 'fixedCustom' : 'variableCustom');
+    const div = document.createElement('div');
+    div.className = 'row custom-row';
+    div.dataset.type = type;
+    div.innerHTML = `
+      <label><input type="text" placeholder="${isFixed ? 'Nama biaya tetap' : 'Nama biaya variabel'}" class="custom-name" style="font-weight:700"></label>
+      <div style="display:flex; gap:8px;">
+        <div class="input-wrapper has-prefix" style="flex:1;"><span class="input-prefix">Rp</span><input type="number" min="0" value="0" class="custom-value"></div>
+        <button type="button" class="btn-del" onclick="this.closest('.custom-row').remove(); hitung();" title="Hapus"><i class="fa-solid fa-xmark"></i></button>
+      </div>`;
+    box.appendChild(div);
+    div.querySelectorAll('input').forEach(x => x.addEventListener('input', hitung));
+    hitung();
+  }
+
+  function sumCustom(type) {
+    return [...document.querySelectorAll(`.custom-row[data-type="${type}"] .custom-value`)]
+      .reduce((s, e) => s + (Math.max(0, Number(e.value) || 0)), 0);
+  }
+
+  function hitung() {
+    const fixed = n('sewa') + n('gaji') + n('internet') + n('izin') + n('susut') + sumCustom('fixed');
+    const variable = n('bahan') + n('minyak') + n('gas') + n('listrik') + n('air') + n('kemasan') + sumCustom('variable');
+    const porsi = Math.max(1, n('porsi')), harga = n('harga'), target = n('target'), komisiPct = n('komisi');
+    
+    const total = fixed + variable;
+    const hpp = total / porsi;
+    const komisi = harga * komisiPct / 100;
+    const pendapatanBersih = harga - komisi;
+    const laba = pendapatanBersih - hpp;
+    const margin = harga > 0 ? (laba / harga * 100) : 0;
+    
+    const hargaRekom = (hpp / (1 - (target / 100))) / (1 - (komisiPct / 100));
+    const fixedPct = total > 0 ? (fixed / total * 100) : 0;
+    const varPct = total > 0 ? (variable / total * 100) : 0;
+
+    document.getElementById('totalTetap').textContent = rp(fixed);
+    document.getElementById('totalVar').textContent = rp(variable);
+    document.getElementById('totalBiaya').textContent = rp(total);
+    document.getElementById('hpp').textContent = rp(hpp);
+    document.getElementById('laba').textContent = rp(laba);
+    document.getElementById('margin').textContent = pct(margin);
+    document.getElementById('pctTetap').textContent = pct(fixedPct);
+    document.getElementById('pctVar').textContent = pct(varPct);
+    document.getElementById('komisiRp').textContent = rp(komisi);
+    document.getElementById('hargaRekom').textContent = rp(hargaRekom);
+    document.getElementById('tHpp').textContent = rp(hpp);
+    document.getElementById('tHppPct').textContent = pct(harga > 0 ? (hpp / harga * 100) : 0);
+    document.getElementById('tKomisi').textContent = rp(komisi);
+    document.getElementById('tKomisiPct').textContent = pct(komisiPct);
+    document.getElementById('tLaba').textContent = rp(laba);
+    document.getElementById('tLabaPct').textContent = pct(margin);
+
+    const s = document.getElementById('status');
+    let title, text, cls, icon;
+    let saranList = [];
+
+    if (harga <= 0) {
+      title = 'Harga Jual Belum Diisi';
+      text = 'Silakan masukkan harga jual produk Anda saat ini untuk melihat analisis lengkap.';
+      cls = 'warn';
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+    } else if (laba < 0) {
+      title = 'SITUASI RUGI - Potensi Kerugian Operasional';
+      text = `Harga jual Anda saat ini berada di bawah total modal produksi setelah komisi. Harga impas / BEP adalah <b>${rp(hpp / (1 - komisiPct / 100))}</b>.`;
+      cls = 'bad';
+      icon = '<i class="fa-solid fa-circle-xmark"></i>';
+      saranList.push(`<b>Menaikkan Harga Jual:</b> Naikkan harga jual mendekati rekomendasi sistem (<b>${rp(hargaRekom)}</b>).`);
+      saranList.push(`<b>Efisiensi Produksi:</b> Tekan biaya bahan baku atau tingkatkan jumlah porsi per adonan/siklus produksi.`);
+    } else if (Math.abs(laba) < 1) {
+      title = 'KONDISI IMPAS (Break Even Point)';
+      text = 'Harga jual Anda hanya cukup untuk menutup biaya produksi tanpa menghasilkan keuntungan murni.';
+      cls = 'warn';
+      icon = '<i class="fa-solid fa-scale-unbalanced"></i>';
+      saranList.push(`Naikkan harga minimal 15-20% di atas modal hpp agar bisnis memiliki margin cadangan.`);
+    } else if (margin < 15) {
+      title = 'MARGIN SANGAT TIPIS';
+      text = `Margin keuntungan bersih Anda sebesar <b>${pct(margin)}</b> sangat riskan terkena kenaikan harga bahan baku.`;
+      cls = 'warn';
+      icon = '<i class="fa-solid fa-triangle-exclamation"></i>';
+      saranList.push(`<b>Menaikkan Harga Jual:</b> Pertimbangkan menaikkan harga bertahap menuju <b>${rp(hargaRekom)}</b>.`);
+    } else if (margin <= 50) {
+      title = 'PROFITABEL & SEHAT';
+      text = `Margin bersih <b>${pct(margin)}</b> tergolong sangat ideal dan sehat untuk lini bisnis kuliner.`;
+      cls = 'good';
+      icon = '<i class="fa-solid fa-circle-check"></i>';
+      saranList.push(`Harga jual Anda sudah sangat optimal dibanding biaya operasional.`);
+    } else {
+      title = 'MARGIN SANGAT TINGGI (>50%)';
+      text = `Keuntungan bersih Anda sangat besar (<b>${pct(margin)}</b>). Produk berada pada margin maksimal.`;
+      cls = 'good';
+      icon = '<i class="fa-solid fa-circle-check"></i>';
+      saranList.push(`<b>Opsi Menurunkan Harga Jual:</b> Jika persaingan pasar ketat, Anda memiliki ruang untuk <b>menurunkan harga jual</b> mendekati rekomendasi (<b>${rp(hargaRekom)}</b>) agar lebih kompetitif tanpa mengorbankan profitabilitas.`);
+    }
+
+    if (varPct > 65 && laba >= 0) {
+      saranList.push(`<b>Optimasi Bahan Baku/Porsi:</b> Biaya bahan mendominasi beban (${pct(varPct)}). Pertimbangkan menyesuaikan porsi kecil (*portion control*) atau negosiasi dengan supplier.`);
+    }
+
+    let htmlSaran = '';
+    if (saranList.length > 0) {
+      htmlSaran = `
+        <div class="recommendation-box">
+          <b><i class="fa-solid fa-lightbulb"></i> Rekomendasi Tindakan AI:</b>
+          <ul class="recommendation-list">
+            ${saranList.map(item => `<li>${item}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+    }
+
+    s.className = 'status ' + cls;
+    s.innerHTML = `
+      <h3>${icon} ${title}</h3>
+      <p>${text}</p>
+      ${htmlSaran}
+    `;
+  }
+
+  function resetForm() {
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = id === 'porsi' ? 100 : (id === 'harga' ? 15000 : (id === 'target' ? 30 : 0));
+    });
+    document.getElementById('fixedCustom').innerHTML = '';
+    document.getElementById('variableCustom').innerHTML = '';
+    hitung();
+  }
+
+  ids.forEach(id => document.getElementById(id).addEventListener('input', hitung));
+  hitung();
+</script>
+
+</body>
+</html>
